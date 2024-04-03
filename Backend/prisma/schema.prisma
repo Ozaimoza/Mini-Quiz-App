@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Admin {
+  admin_id    Int      @id @default(autoincrement())
+  full_name   String?   
+  username    String   @unique @db.VarChar(255) 
+  password    String   @db.VarChar(255)
+  email       String   @db.VarChar(255) @unique
+
+
+  //relation
+  question    Question[]
+
+}
+
+model User {
+  user_id     Int      @id @default(autoincrement())
+  full_name   String?   
+  username    String   @unique @db.VarChar(255) 
+  password    String   @db.VarChar(255)
+  email       String   @db.VarChar(255) @unique
+  score       Int?
+
+  //relation
+  useranswer    UserAnswer[]
+}
+
+model Question {
+  question_id     Int       @id @default(autoincrement())
+  question        String    @db.Text
+
+  //relation to Admin 
+  admin      Admin          @relation(fields: [admin_id], references: [admin_id])
+  admin_id         Int  
+
+  //relation
+  multiplecoice   MultipleChoice[]
+  useranswer      UserAnswer[]
+}
+
+model MultipleChoice {
+  multiple_choice_id  Int         @id @default(autoincrement())
+  correct             Boolean     @default(false)
+
+  //relation to Question
+  question      Question           @relation(fields: [question_id], references: [question_id])
+  question_id         Int    
+
+
+
+  answer              String    @db.Text
+
+  // relation
+  useranswer     UserAnswer[]
+}
+
+model UserAnswer {
+  user_asnwer_id      Int       @id @default(autoincrement())
+
+  //relation to User
+  user      User           @relation(fields: [user_id], references: [user_id])
+  user_id             Int
+
+  //relation to Question
+  question      Question           @relation(fields: [question_id], references: [question_id])
+  question_id         Int
+
+  //relation to MultipleChoice
+  multiplechoice      MultipleChoice           @relation(fields: [user_choice], references: [multiple_choice_id])
+  user_choice         Int
+}
+
+
+
