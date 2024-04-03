@@ -56,7 +56,6 @@ const UserRegister = () => {
                 type="submit"
                 className="py-4 bg-blue-500 w-full rounded text-blue-50 font-bold hover:bg-blue-700"
               >
-                {" "}
                 REGISTER
               </button>
             </div>

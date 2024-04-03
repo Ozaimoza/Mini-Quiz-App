@@ -2,7 +2,7 @@ FROM node:alpine
 
 ENV NODE_VERSION 21.6.2
 
-WORKDIR /image-sharing/app
+WORKDIR /mini-quiz/app
 
 COPY  package*.json ./
 
